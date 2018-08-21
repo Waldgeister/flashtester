@@ -1,7 +1,6 @@
 /**
- * @name Vela flash tester
- * @brief Test flash speed using Arduino
- * @copyright (C) 2015 Vela Labs Ltd
+ * @name Speedlight Duration Measurement
+ * @brief Test flash speed using Arduino Nano
  * The MIT License (MIT) 
  * 
  * Permission is hereby granted, free of charge, to any person 
@@ -25,8 +24,8 @@
  * /
 
 /**
- * @file flashTester.ino
- * @author Matt Kane <matt@vela.io>
+ * @file flashTesterNano.ino
+ * @author Waldgeister
  */
 
 
@@ -37,8 +36,8 @@ static uint8_t flash;
 static uint8_t ignore;
 static uint8_t triggering;
     
-#define BUTTON_PIN 3
-#define FLASH_PIN 4
+#define BUTTON_PIN 2    //changed for Nano Version
+#define FLASH_PIN 7     //changed for Nano Version
 
 void setup() {
     
@@ -70,16 +69,17 @@ void setup() {
   
     //Use multiplexer for comparator negative input.
     //This is our reference voltage.
-    //Defaults to ADC0, i.e. PF0/Analog 5
-    ADCSRB |= _BV(ACME);
+    //Defaults to ADC0, i.e. PF0/Analog 5 --> on Nano Analog 0
+    ADCSRB |= _BV(ACME);  // disable: Analog Comparator Multiplexer Enable
     
     //Turn off the ADC as we'll be using its multiplexer.
     ADCSRA &= ~_BV(ADEN);
 
-    //Turn off digital input on the comparator negative input (PE6)  
+    //Turn off digital input on the comparator negative input  
+    //on the Nano this is Digital Pin 6
     DIDR1 |= _BV(AIN0D);
     
-    //Enable input for start button (INT0/ digital 3) 
+    //Enable input for start button (INT0/ digital 2 on Nano) 
     pinMode(BUTTON_PIN, INPUT_PULLUP);
     //Turn on external interrupts
     EIMSK = _BV(INT0);
